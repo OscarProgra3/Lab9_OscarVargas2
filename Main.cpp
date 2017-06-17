@@ -7,6 +7,9 @@
 #include "Cliente.h"
 #include "Administrador.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+
 #include <fstream>
 #include <typeinfo>
 #include <sstream>
@@ -15,9 +18,13 @@ using namespace std;
 
 void listarautos(vector<Vehiculo*>,vector<int>);
 void Factura(vector<Vehiculo*> listacarrosT,string usernameT);
+void imprimirautos(vector<Vehiculo*> listacarrost,vector<int> rentadostt);
+void imprimirusuarios(vector<Usuarios*> listaUsuariosT);
 
 int main()
 {
+
+	srand(time(NULL));
 	
 	vector<Usuarios*> listaUsuarios;
 	vector<Vehiculo*> listaVehiculos;
@@ -28,11 +35,22 @@ int main()
 	string username, password,membresia,cargo;
 	int seguro;
 	int resp=9;
-	while(resp!=3)
+	while(resp!=5)
 	{
-		cout<<endl<<endl<<"Bienvenido\n1.-Agregar Usuarios\n2.-Login\n3.-Salir\ningrese su opcion: ";
+		cout<<endl<<endl<<"Bienvenido\n1.-Agregar Usuarios\n2.-Login\n3.-Listar e imprimir vehiculos\n4.-Guardar reporte\n5.-Salir\ningrese su opcion: ";
 			cin>>resp;
 			cout<<endl;
+			if (resp==3)
+			{
+				listarautos(listaVehiculos,numrentados);
+				imprimirautos(listaVehiculos,numrentados);
+				cout<<endl<<"IMPRESION REALIZADA CON EXITO"<<endl;
+			}
+			if (resp==4)
+			{
+				void imprimirusuarios(vector<Usuarios*> listaUsuariosT);
+				
+			}
 			if (resp==1)//opcionagregar
 			{
 
@@ -174,10 +192,78 @@ int main()
 							while(respadmi!=4)
 							{
 								cout<<endl<<"Que es lo que desea realizar\n1.-Agregar Vehiculos\n2.-Modificar Vehiculos\n3.-Eliminar Vehiculos\n4.-Salir"<<endl;
+								cin>>respadmi;
 								if (respadmi==1)//agrega carro
 								{
+									string placat,marcat,modelot;
+									int aniot,r;
+									double preciot;
 									
+								
+
+										for (int i = 0; i < 4; ++i)
+										{
+											r = rand() % 6 + 1;
+											if (r == 1)
+											{
+												placat+= "A";
+											} else if (r == 2)
+											{
+												placat+=  "B";
+											} else if (r == 3)
+											{
+												placat+=  "C";
+											} else if (r == 4)
+											{
+												placat+=  "D";
+											} else if (r == 5)
+											{
+												placat+= "E";
+											} else if (r == 6)
+											{
+												placat+= "F";
+											} else {
+												placat+= "H";
+											}
+										}
+
+										int t;
+										string tt;
+										placat+="--";
+										for (int i = 0; i < 4; ++i)
+										{
+											t= rand() % 9 + 1;
+											tt=t+"";
+											placat+=tt;
+										}
+
+									cout<<"PLACA: "<<placat;
+									cout<<endl<<"ingrese la marca del vehiculo: ";
+									cin>>marcat;
+
+									cout<<endl<<"ingrese el modelo del vehiculo: ";
+									cin>>modelot;
+
+									cout<<endl<<"ingrese el año del vehiculo: ";
+									cin>>aniot;
+
+									cout<<endl<<"ingrese el precio del vehiculo: ";
+									cin>>preciot;
+
+									listaVehiculos.push_back(new Vehiculo(placat, marcat, modelot,aniot,preciot));
+									cout<<endl<<"VEHICULO AGREGADO CON EXITO"<<endl;
+
 								}//fin agregar carro
+								if (respadmi==3)
+								{
+									int eliminar;
+									listarautos(listaVehiculos,numrentados);
+									cout<<endl<<"¿QUE NUMERO DE AUTO DESEA ELIMINAR?: ";
+									cin>>eliminar;
+									listaVehiculos.erase(listaVehiculos.begin()+eliminar);
+									cout<<endl<<"VEHICULO ELIMINADO CON EXITO"<<endl;
+
+								}
 							}
 							
 
@@ -213,14 +299,76 @@ void listarautos(vector<Vehiculo*> listacarros,vector<int> rentadost)
 			}
 
 
-
-			//Lavaplatos* templavaplatos=dynamic_cast<Lavaplatos*>(listaousuariosT.at(i));
-
 			
 			
 			cout <<endl<< "----------------------------------------------" << endl;
 	}
 }
+
+void imprimirusuarios(vector<Usuarios*> listaUsuariosT)
+{
+	ofstream  salida;
+	stringstream stm;
+	string fichero;
+
+	stm << "./log_alquileres/Usuarios.log";
+	
+	cout<<endl<<"----------LISTA DE LOS USUARIOS ---------------------";
+	for (int i = 0; i < listaUsuariosT.size(); ++i)
+	{
+			salida << endl<<"        Numero de Usuario: " << (i) << endl;
+			salida << endl<<"Nombre del usuario: "<< listaUsuariosT.at(i)->getNombre()<<endl;
+			salida << endl<<"Marca: "<< listaUsuariosT.at(i)->getPass()<<endl;
+			
+			if (listaUsuariosT.at(i)->getTipoUsuario()=="Cliente")
+			{
+				salida<<endl<<"tipo Cliente";
+			}else
+			{
+				salida<<endl<<"tipo Administrador";
+			}
+			
+			cout <<endl<< "----------------------------------------------" << endl;
+}	
+
+
+}
+
+void imprimirautos(vector<Vehiculo*> listacarrost,vector<int> rentadostt)
+{
+
+
+	ofstream  salida;
+	stringstream stm;
+	string fichero;
+
+	stm << "./log_alquileres/Vehiculos.log";
+	
+	cout<<endl<<"----------LISTA DE LOS VEHICULOS ---------------------";
+	for (int i = 0; i < listacarrost.size(); ++i)
+	{
+			salida << endl<<"        Numero del Vehiculo: " << (i) << endl;
+			salida << endl<<"Placa: "<< listacarrost.at(i)->getPlaca()<<endl;
+			salida << endl<<"Marca: "<< listacarrost.at(i)->getMarca()<<endl;
+			salida << endl<<"Modelo: "<< listacarrost.at(i)->getModelo()<<endl;
+			salida << endl<<"Anio del vehiculo: "<< listacarrost.at(i)->getAnio()<<endl;
+			salida << endl<<"............................Precio: "<< listacarrost.at(i)->getPrecio()<<endl;
+			salida <<endl<< "----------------------------------------------" << endl;
+			for (int i = 0; i < rentadostt.size(); ++i)
+			{
+				if (rentadostt.at(i)==i)
+				{
+					salida <<endl<< "este vehiculo esta alquilado" << endl;
+			
+				}
+			}
+	}
+
+			
+			cout <<endl<< "----------------------------------------------" << endl;
+}
+
+
 
 
 void Factura(vector<Vehiculo*> listacarrosT,string usernameT)
@@ -254,58 +402,3 @@ void Factura(vector<Vehiculo*> listacarrosT,string usernameT)
 			salida <<endl<< "----------------------------------------------" << endl;
 
 }
-
-/*
-void imprimirVenta(Venta* venta)
-{
-	int contarticulos=0;
-	ofstream  salida;
-	stringstream stm;
-	string fichero;
-
-	string horafinalizacion=hora();
-	stm << "./log_ventas/" << horafinalizacion<<"_"<<venta->getNombreusuario()<< ".log";
-	fichero = stm.str();
-	salida.open(fichero.c_str());
-	salida << "-----------GAMEHUB---------" << endl;
-	salida << "---------------------------" << endl;
-	salida << horafinalizacion << endl;
-	salida << "Vendedor: " << venta->getNombreusuario()<< endl;
-	salida << "Cliente: " << venta->getNombrecliente() << endl;
-	int contador = venta->getTamConsola() + venta->getTamJuegos();
-
-	salida <<endl<< "Cantidad de articulos " << contador  << endl;
-	salida <<endl;
-	vector <Consolas*> listaconsolasTe = venta -> getListaconsolas();
-	vector<Videojuegos*> listavideojuegosTe = venta -> getListavideojuegos();
-
-	salida<< "Articulos: "<<endl<<endl;
-	for (int i=0; i < listaconsolasTe.size(); i++)
-	{
-		salida << listaconsolasTe.at(i)->getModelo() << "    L." << listaconsolasTe.at(i)->getPrecio() << endl;
-	}
-	for (int i=0; i < listavideojuegosTe.size(); i++)
-	{
- 		salida << listavideojuegosTe.at(i)->getNombre() << "     L." << listavideojuegosTe.at(i)->getPrecio() << endl;
-	}
-
-	salida << "Subtotal: " << venta->getSubtotal() << endl;
-	double impuesto = venta->getSubtotal()*0.15;
-	salida << "Impuesto: " << impuesto << endl;
-	double total = venta->getSubtotal() + impuesto;
-	salida << "Total: " << total << endl;
-	salida.close();
-	salida << "---------------------------" << endl;
-	salida << "---------------------------" << endl;
-	for (int i = 0; i < listaconsolasTe.size(); ++i)
-	{
-		listaconsolasTe.erase(listaconsolasTe.begin() + i);
-	}
-	listaconsolasTe.clear();
-
-	for (int i = 0; i < listavideojuegosTe.size(); ++i)
-	{
-		listavideojuegosTe.erase(listavideojuegosTe.begin() + i);
-	}
-	listavideojuegosTe.clear();
-}*/
